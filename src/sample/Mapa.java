@@ -20,10 +20,28 @@ import java.util.Scanner;
 public class Mapa extends Application {
 
     private enum Block {
-        SPACE, START, END, GROUND
+        SPACE {
+            public String toString(){
+                return "-";
+            }
+        }
+        , START {
+            public String toString(){
+                return "S";
+            }
+        }, END {
+            public String toString(){
+                return "E";
+            }
+        }, GROUND {
+            public String toString(){
+                return "X";
+            }
+        };
     }
 
     private Position start, end;
+
     private int mapWidth, mapHeight;
 
     private ArrayList<Block> map = new ArrayList<>();
@@ -31,10 +49,44 @@ public class Mapa extends Application {
     private GraphicsContext graphics_context;
     private final int BLOCK_HEIGHT = 15, BLOCK_WIDTH = 15;
 
+    public Position getStart() {
+        return start;
+    }
+
+    public Position getEnd() {
+        return end;
+    }
+
+    public boolean obstacleAt(Position pos) {
+        final int NORTH = 0, EAST = 1, SOUTH = 2, WEST = 3;
+        int dx = 0, dy = 0;
+
+        switch (pos.orientation) {
+            case NORTH:
+                dy = -1;
+                break;
+            case EAST:
+                dx = 1;
+                break;
+            case SOUTH:
+                dy = 1;
+                break;
+            case WEST:
+                dx = -1;
+                break;
+        }
+
+        if ( map.get(  ( pos.x + dx ) + (pos.y + dy) * mapWidth ) == Block.GROUND ) {
+            return true;
+        }
+
+        return false;
+    }
+
     private void drawMap() {
         int i = 0;
         for (Block block : map) {
-            draw(block, (i % mapWidth) * BLOCK_WIDTH, (i / mapHeight) * BLOCK_HEIGHT);
+            draw(block, (i % mapWidth) * BLOCK_WIDTH, (i / mapWidth) * BLOCK_HEIGHT);
             i++;
         }
 
@@ -98,6 +150,24 @@ public class Mapa extends Application {
         }
 
     }
+
+    public Mapa(){
+    }
+
+    // launch the application
+    public Mapa(Canvas mapCanvas) {
+
+        loadMap();
+        mapHeight = map.size() / mapWidth;
+
+        // graphics context
+        graphics_context =
+                mapCanvas.getGraphicsContext2D();
+
+        drawMap();
+        // draw(Block.GROUND, 0, 0);
+    }
+
 
     // launch the application
     public void start(Stage stage) {

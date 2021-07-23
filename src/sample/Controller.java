@@ -26,32 +26,37 @@ public class Controller {
 
     public Position position;
 
+    private Mapa mapa;
+
     private final int  RobotWidth = 15;
 
     public void initialize() throws Exception {
 
-        interact = new Interact(this);
+        mapa = new Mapa(mapLayer);
+
+        interact = new Interact(this, mapa);
         interact.go();
 
         gc = robotLayer.getGraphicsContext2D();
         drawShapes(gc);
 
+        robotLayer.toFront();
+
+        /*
         gc2 = mapLayer.getGraphicsContext2D();
         gc2.setFill(Color.BLUE);
         gc2.fillOval(100,100,20,20);
-
+        */
     }
 
 
 
     public void button(ActionEvent event)  {
-
         /*
         robotLayer.setTranslateX(-70);
         robotLayer.setTranslateY(10);
         robotLayer.setRotate(180);
-*/
-
+        */
 
         System.exit(0);
 
@@ -62,20 +67,20 @@ public class Controller {
         gc.setStroke(Color.BLUE);
         gc.setLineWidth(5);
 
-        int incX = this.position.x*RobotWidth;
-
-        gc.fillRoundRect(110+incX, 60, RobotWidth, RobotWidth, 10, 10);
+        // int incX = this.position.x*RobotWidth;
+        // gc.fillRoundRect(mapa.getStart().x *RobotWidth +incX, mapa.getStart().y * RobotWidth, RobotWidth, RobotWidth, 10, 10);
+        gc.fillRoundRect(this.position.x * RobotWidth , this.position.y * RobotWidth, RobotWidth, RobotWidth, 10, 10);
         gc.setFill(Color.BLACK);
 
         switch (position.orientation) {
             case 0:
-                gc.fillPolygon(new double[]{113+incX, 118+incX, 123+incX},
+                gc.fillPolygon(new double[]{113+RobotWidth, 118+RobotWidth, 123+RobotWidth},
                         new double[]{60, 54, 60}, 3);
 
                 break;
             case 1:
 
-                gc.fillPolygon(new double[]{124+incX, 130+incX, 124+incX},
+                gc.fillPolygon(new double[]{124+RobotWidth, 130+RobotWidth, 124+RobotWidth},
                         new double[]{63, 68, 73}, 3);
                 break;
         }

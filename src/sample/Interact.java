@@ -11,8 +11,6 @@ import java.util.concurrent.TimeUnit;
 class Position {
     static String[] array = {"NORTH", "EAST", "SOUTH", "WEST"};
     static List<String> orientationList = new ArrayList<String>(Arrays.asList(array));
-    static final int TOPEX = 5;
-    static final int TOPEY = 5;
 
     int orientation = 0;
     int x, y;
@@ -32,13 +30,16 @@ class Position {
 
 public class Interact {
 
-    Position position = new Position(0,0);
+    Position position; // = new Position(0,0);
 
     private Controller controller;
+    private Mapa mapa;
 
-    Interact(Controller controller){
+    Interact(Controller controller, Mapa mapa){
         this.controller = controller;
-        this.controller.position = position;
+        // this.position = controller.position;
+        this.controller.position = mapa.getStart();
+        this.mapa = mapa;
     }
 
 
@@ -57,33 +58,39 @@ public class Interact {
             //communication
             setUpStreamGobbler(p.getInputStream(), System.out);
 
+            // FIXME (duplicated code)
+            position = mapa.getStart();
             // Scanner sc = new Scanner(System.in);
             // while (true) {
-            while (position.x != Position.TOPEX && position.y != Position.TOPEY) {
+            while (position.x != mapa.getEnd().x || position.y != mapa.getEnd().y) {
                 try {
-                    TimeUnit.SECONDS.sleep(2);
+                    TimeUnit.SECONDS.sleep(1);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 String c; // = sc.nextLine();
 
                 // Primer paso, girar
-                if (position.x == 0 && position.orientation == 0){
+                if (mapa.obstacleAt(position)){
                     c = "0";
                 } else {
                     c = "1";
                 }
 
-                if (!c.contains("0") && !c.contains("1")) {
-                    System.exit(0);
-                }
+//                if (!c.contains("0") && !c.contains("1")) {
+//                    System.exit(0);
+//                }
                 try {
                     out.write(c + "\n");
                     out.flush();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    // e.printStackTrace();
+                    System.out.println("Stream closed");
                 }
             }
+
+            System.err.println("Tararí" + mapa.getEnd());
+
         }).start();
     }
 
@@ -107,16 +114,17 @@ public class Interact {
                             System.err.println( Position.orientationList.get(position.orientation));
                         }else if (line.contains("Sigue")) {
                             switch (position.orientation) {
-                                case 0:
-                                    position.y++;
-                                    break;
-                                case 1:
-                                    position.x++;
-                                    break;
-                                case 2:
+                                // FIXME Orientation
+                                case 0: // NORTH
                                     position.y--;
                                     break;
-                                case 3:
+                                case 1: // EAST
+                                    position.x++;
+                                    break;
+                                case 2: // SOUTH
+                                    position.y++;
+                                    break;
+                                case 3: // WEST
                                     position.x--;
                                     break;
                             }
@@ -124,6 +132,10 @@ public class Interact {
                             System.err.println("Sigue");
                             controller.imprimir("Sigue");
                             System.err.println("Position:" +  position.x  + "," + position.y);
+                            System.err.println( Position.orientationList.get(position.orientation));
+                        } else if (line.contains("HA LLEGADO")) {
+                            controller.imprimir("YOU GOT IT!");
+                            break;
                         }
                         ps.println("process stream: " + line);
                     }
