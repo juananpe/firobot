@@ -69,21 +69,17 @@ public class Controller {
 
         // int incX = this.position.x*RobotWidth;
         // gc.fillRoundRect(mapa.getStart().x *RobotWidth +incX, mapa.getStart().y * RobotWidth, RobotWidth, RobotWidth, 10, 10);
-        gc.fillRoundRect(this.position.x * RobotWidth , this.position.y * RobotWidth, RobotWidth, RobotWidth, 10, 10);
+        gc.fillRoundRect(position.x * RobotWidth , position.y * RobotWidth, RobotWidth, RobotWidth, 10, 10);
         gc.setFill(Color.BLACK);
 
-        switch (position.orientation) {
-            case 0:
-                gc.fillPolygon(new double[]{113+RobotWidth, 118+RobotWidth, 123+RobotWidth},
-                        new double[]{60, 54, 60}, 3);
+        int [][] incs = {{ 3,8,13,8,3,8} /* NORTH */,
+                {5,10,5,0,5,10} /* EAST */,
+                {3,8,13,3,7,3} /* SOUTH */,
+                {10,5,10,0,5,10} /* WEST */
+        } ;
 
-                break;
-            case 1:
-
-                gc.fillPolygon(new double[]{124+RobotWidth, 130+RobotWidth, 124+RobotWidth},
-                        new double[]{63, 68, 73}, 3);
-                break;
-        }
+        gc.fillPolygon(new double[]{position.x*RobotWidth+incs[position.orientation][0], position.x*RobotWidth+incs[position.orientation][1], position.x*RobotWidth+incs[position.orientation][2]},
+                        new double[]{position.y*RobotWidth+incs[position.orientation][3], position.y*RobotWidth+incs[position.orientation][4], position.y*RobotWidth+incs[position.orientation][5]}, 3);
 
 
     }

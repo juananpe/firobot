@@ -6,9 +6,9 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="525.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <children>
-      <SplitPane dividerPositions="0.37640449438202245" layoutX="6.0" layoutY="6.0" orientation="VERTICAL" prefHeight="490.0" prefWidth="590.0">
+      <SplitPane dividerPositions="0.38932038834951455" layoutX="6.0" layoutY="6.0" orientation="VERTICAL" prefHeight="517.0" prefWidth="590.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="126.0" prefWidth="560.0">
                <children>

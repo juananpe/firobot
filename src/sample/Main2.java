@@ -11,8 +11,8 @@ public class Main2 extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 600, 500));
+        primaryStage.setTitle("FI Robot");
+        primaryStage.setScene(new Scene(root, 600, 550));
         primaryStage.show();
     }
 

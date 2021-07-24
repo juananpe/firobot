@@ -58,20 +58,19 @@ public class Mapa extends Application {
     }
 
     public boolean obstacleAt(Position pos) {
-        final int NORTH = 0, EAST = 1, SOUTH = 2, WEST = 3;
         int dx = 0, dy = 0;
 
         switch (pos.orientation) {
-            case NORTH:
+            case Orientation.NORTH:
                 dy = -1;
                 break;
-            case EAST:
+            case Orientation.EAST:
                 dx = 1;
                 break;
-            case SOUTH:
+            case Orientation.SOUTH:
                 dy = 1;
                 break;
-            case WEST:
+            case Orientation.WEST:
                 dx = -1;
                 break;
         }
