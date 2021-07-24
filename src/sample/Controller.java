@@ -24,18 +24,13 @@ public class Controller {
 
     GraphicsContext gc, gc2;
 
-    public Position position;
+    public Position position = new Position(0, 0);
 
     private Mapa mapa;
 
-    private final int  RobotWidth = 15;
+    private final int RobotWidth = 15;
 
     public void initialize() throws Exception {
-
-        mapa = new Mapa(mapLayer);
-
-        interact = new Interact(this, mapa);
-        interact.go();
 
         gc = robotLayer.getGraphicsContext2D();
         drawShapes(gc);
@@ -50,15 +45,34 @@ public class Controller {
     }
 
 
+    public void stop(ActionEvent event) {
+        if (interact != null) {
+            try {
+                interact.stop();
+            } catch (InterruptedException e) {
+                System.out.println("Reloj parado");
+            }
+        }
+    }
 
-    public void button(ActionEvent event)  {
+    public void start(ActionEvent event) {
         /*
         robotLayer.setTranslateX(-70);
         robotLayer.setTranslateY(10);
         robotLayer.setRotate(180);
         */
 
-        System.exit(0);
+        if (mapa == null) {
+            mapa = new Mapa(mapLayer);
+        }
+
+        if (interact == null) {
+            interact = new Interact(this, mapa);
+        }
+        interact.go();
+
+
+//        System.exit(0);
 
     }
 
@@ -69,17 +83,17 @@ public class Controller {
 
         // int incX = this.position.x*RobotWidth;
         // gc.fillRoundRect(mapa.getStart().x *RobotWidth +incX, mapa.getStart().y * RobotWidth, RobotWidth, RobotWidth, 10, 10);
-        gc.fillRoundRect(position.x * RobotWidth , position.y * RobotWidth, RobotWidth, RobotWidth, 10, 10);
+        gc.fillRoundRect(position.x * RobotWidth, position.y * RobotWidth, RobotWidth, RobotWidth, 10, 10);
         gc.setFill(Color.BLACK);
 
-        int [][] incs = {{ 3,8,13,8,3,8} /* NORTH */,
-                {5,10,5,0,5,10} /* EAST */,
-                {3,8,13,3,7,3} /* SOUTH */,
-                {10,5,10,0,5,10} /* WEST */
-        } ;
+        int[][] incs = {{3, 8, 13, 8, 3, 8} /* NORTH */,
+                {5, 10, 5, 0, 5, 10} /* EAST */,
+                {3, 8, 13, 3, 7, 3} /* SOUTH */,
+                {10, 5, 10, 0, 5, 10} /* WEST */
+        };
 
-        gc.fillPolygon(new double[]{position.x*RobotWidth+incs[position.orientation][0], position.x*RobotWidth+incs[position.orientation][1], position.x*RobotWidth+incs[position.orientation][2]},
-                        new double[]{position.y*RobotWidth+incs[position.orientation][3], position.y*RobotWidth+incs[position.orientation][4], position.y*RobotWidth+incs[position.orientation][5]}, 3);
+        gc.fillPolygon(new double[]{position.x * RobotWidth + incs[position.orientation][0], position.x * RobotWidth + incs[position.orientation][1], position.x * RobotWidth + incs[position.orientation][2]},
+                new double[]{position.y * RobotWidth + incs[position.orientation][3], position.y * RobotWidth + incs[position.orientation][4], position.y * RobotWidth + incs[position.orientation][5]}, 3);
 
 
     }
@@ -89,7 +103,7 @@ public class Controller {
         Platform.runLater(() -> {
             console.appendText(message + "\n");
 
-            gc.clearRect(0,0 , robotLayer.getWidth(), robotLayer.getHeight());
+            gc.clearRect(0, 0, robotLayer.getWidth(), robotLayer.getHeight());
             drawShapes(gc);
         });
     }

@@ -16,11 +16,11 @@ class Position {
     int x, y;
     // int orientation;
 
-    public String toString(){
+    public String toString() {
         return "x:" + x + " y:" + y;
     }
 
-    Position(int x, int y){
+    Position(int x, int y) {
         this.x = x;
         this.y = y;
         this.orientation = 0;
@@ -30,22 +30,27 @@ class Position {
 
 public class Interact {
 
-    Position position; // = new Position(0,0);
-
     private Controller controller;
     private Mapa mapa;
+    private Thread reloj, streamGobbler;
+    private Boolean playing = false;
 
-    Interact(Controller controller, Mapa mapa){
+    Interact(Controller controller, Mapa mapa) {
         this.controller = controller;
-        // this.position = controller.position;
-        this.controller.position = mapa.getStart();
         this.mapa = mapa;
     }
 
 
+    public void stop() throws InterruptedException {
+        playing = false;
+
+//        reloj.join();
+//        streamGobbler.join();
+    }
 
     public void go() {
-        new Thread(() -> {
+        playing = true;
+        reloj = new Thread(() -> {
             Process p = null;
             try {
                 p = Runtime.getRuntime().exec("/tmp/robot");
@@ -59,10 +64,13 @@ public class Interact {
             setUpStreamGobbler(p.getInputStream(), System.out);
 
             // FIXME (duplicated code)
-            position = mapa.getStart();
+            controller.position.x = mapa.getStart().x;
+            controller.position.y = mapa.getStart().y;
+            controller.position.orientation = Orientation.NORTH;
+            controller.imprimir("Starting...");
             // Scanner sc = new Scanner(System.in);
             // while (true) {
-            while (position.x != mapa.getEnd().x || position.y != mapa.getEnd().y) {
+            while (playing && (controller.position.x != mapa.getEnd().x || controller.position.y != mapa.getEnd().y)) {
                 try {
                     TimeUnit.SECONDS.sleep(1);
                 } catch (InterruptedException e) {
@@ -71,7 +79,7 @@ public class Interact {
                 String c; // = sc.nextLine();
 
                 // Primer paso, girar
-                if (mapa.obstacleAt(position)){
+                if (mapa.obstacleAt(controller.position)) {
                     c = "0";
                 } else {
                     c = "1";
@@ -88,51 +96,52 @@ public class Interact {
                     System.out.println("Stream closed");
                 }
             }
+            playing = false;
+            System.err.println("Stopped at:" + controller.position);
 
-            System.err.println("Tararí" + mapa.getEnd());
-
-        }).start();
+        });
+        reloj.start();
     }
 
 
-    public static void main(String[] args) throws Exception{
-      // new Interact().go();
+    public static void main(String[] args) throws Exception {
+        // new Interact().go();
     }
 
     public void setUpStreamGobbler(final InputStream is, final PrintStream ps) {
         final InputStreamReader streamReader = new InputStreamReader(is);
-        new Thread(new Runnable() {
+        streamGobbler = new Thread(new Runnable() {
             public void run() {
                 BufferedReader br = new BufferedReader(streamReader);
                 String line = null;
                 try {
-                    while ((line = br.readLine()) != null) {
-                        if (line.contains("girar")){
+                    while (playing && (line = br.readLine()) != null) {
+                        if (line.contains("girar")) {
                             System.err.println("Girar");
                             controller.imprimir("Girar");
-                            position.orientation = (position.orientation + 1) % 4;
-                            System.err.println( Position.orientationList.get(position.orientation));
-                        }else if (line.contains("Sigue")) {
-                            switch (position.orientation) {
+                            controller.position.orientation = (controller.position.orientation + 1) % 4;
+                            System.err.println(Position.orientationList.get(controller.position.orientation));
+                        } else if (line.contains("Sigue")) {
+                            switch (controller.position.orientation) {
                                 // FIXME Orientation
                                 case 0: // NORTH
-                                    position.y--;
+                                    controller.position.y--;
                                     break;
                                 case 1: // EAST
-                                    position.x++;
+                                    controller.position.x++;
                                     break;
                                 case 2: // SOUTH
-                                    position.y++;
+                                    controller.position.y++;
                                     break;
                                 case 3: // WEST
-                                    position.x--;
+                                    controller.position.x--;
                                     break;
                             }
 
                             System.err.println("Sigue");
                             controller.imprimir("Sigue");
-                            System.err.println("Position:" +  position.x  + "," + position.y);
-                            System.err.println( Position.orientationList.get(position.orientation));
+                            System.err.println("Position:" + controller.position.x + "," + controller.position.y);
+                            System.err.println(Position.orientationList.get(controller.position.orientation));
                         } else if (line.contains("HA LLEGADO")) {
                             controller.imprimir("YOU GOT IT!");
                             break;
@@ -149,6 +158,7 @@ public class Interact {
                     }
                 }
             }
-        }).start();
+        });
+        streamGobbler.start();
     }
 }
