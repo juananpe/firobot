@@ -13,6 +13,8 @@ import java.io.File;
 
 public class Controller {
 
+    public String solver;
+
     @FXML
     private TextArea console;
     private Interact interact;
@@ -65,6 +67,18 @@ public class Controller {
     }
 
     public void loadSolver(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Selecciona el ejecutable a probar");
+        System.out.println(System.getProperty("os.name"));
+
+        if (System.getProperty("os.name").contains("Windows")) {
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Ficheros ejecutables",  "*.exe"));
+        }
+        File ficheroSolver = fileChooser.showOpenDialog(null);
+        if (ficheroSolver == null || !ficheroSolver.isFile()) {
+            return;
+        }
+        solver = ficheroSolver.getAbsolutePath();
 
     }
 

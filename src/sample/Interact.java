@@ -58,7 +58,12 @@ public class Interact {
         reloj = new Thread(() -> {
             Process p = null;
             try {
-                p = Runtime.getRuntime().exec("/tmp/robot");
+                if (controller.solver == null){
+                    controller.imprimir("Starting...");
+                    return;
+                }
+
+                p = Runtime.getRuntime().exec(controller.solver);
             } catch (IOException e) {
                 e.printStackTrace();
             }
