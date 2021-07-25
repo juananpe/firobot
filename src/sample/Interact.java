@@ -35,11 +35,16 @@ public class Interact {
     private Thread reloj, streamGobbler;
     private Boolean playing = false;
 
+
     Interact(Controller controller, Mapa mapa) {
         this.controller = controller;
         this.mapa = mapa;
     }
 
+
+    public void setMap(Mapa mapa){
+        this.mapa = mapa;
+    }
 
     public void stop() throws InterruptedException {
         playing = false;

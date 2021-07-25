@@ -3,14 +3,13 @@ package sample;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.TextArea;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.ArcType;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.transform.Rotate;
+import javafx.stage.FileChooser;
+
+import java.io.File;
 
 public class Controller {
 
@@ -22,28 +21,52 @@ public class Controller {
     @FXML
     private Canvas mapLayer;
 
-    GraphicsContext gc, gc2;
+    GraphicsContext gc;
 
     public Position position = new Position(0, 0);
 
     private Mapa mapa;
+    private File ficheroMapa;
 
     private final int RobotWidth = 15;
 
     public void initialize() throws Exception {
-
         gc = robotLayer.getGraphicsContext2D();
-        drawShapes(gc);
-
+        // drawShapes(gc);
         robotLayer.toFront();
-
-        /*
-        gc2 = mapLayer.getGraphicsContext2D();
-        gc2.setFill(Color.BLUE);
-        gc2.fillOval(100,100,20,20);
-        */
     }
 
+    public void loadMapFile(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Selecciona un mapa");
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Ficheros mapa",  "*.txt"));
+        ficheroMapa = fileChooser.showOpenDialog(null);
+        if (ficheroMapa == null || !ficheroMapa.isFile()) {
+            return;
+        }
+
+        // remove previous map
+        mapLayer.getGraphicsContext2D().clearRect(0, 0, mapLayer.getWidth(), mapLayer.getHeight());
+        // remove previous robot
+        robotLayer.getGraphicsContext2D().clearRect(0, 0, robotLayer.getWidth(), robotLayer.getHeight());
+
+        // load new map
+        mapa = new Mapa(mapLayer, ficheroMapa);
+        if (interact == null) {
+            interact = new Interact(this, mapa);
+        }
+        interact.setMap(mapa);
+        // initialize robot's initial position
+        position.x = mapa.getStart().x;
+        position.y = mapa.getStart().y;
+        position.orientation = Orientation.NORTH;
+        // draw new map;
+        drawShapes(gc);
+    }
+
+    public void loadSolver(ActionEvent event) {
+
+    }
 
     public void stop(ActionEvent event) {
         if (interact != null) {
@@ -56,23 +79,13 @@ public class Controller {
     }
 
     public void start(ActionEvent event) {
-        /*
-        robotLayer.setTranslateX(-70);
-        robotLayer.setTranslateY(10);
-        robotLayer.setRotate(180);
-        */
 
         if (mapa == null) {
-            mapa = new Mapa(mapLayer);
+            // this will also instantiate the interact object the first time
+            loadMapFile(null);
         }
 
-        if (interact == null) {
-            interact = new Interact(this, mapa);
-        }
         interact.go();
-
-
-//        System.exit(0);
 
     }
 
@@ -81,8 +94,6 @@ public class Controller {
         gc.setStroke(Color.BLUE);
         gc.setLineWidth(5);
 
-        // int incX = this.position.x*RobotWidth;
-        // gc.fillRoundRect(mapa.getStart().x *RobotWidth +incX, mapa.getStart().y * RobotWidth, RobotWidth, RobotWidth, 10, 10);
         gc.fillRoundRect(position.x * RobotWidth, position.y * RobotWidth, RobotWidth, RobotWidth, 10, 10);
         gc.setFill(Color.BLACK);
 
@@ -94,7 +105,6 @@ public class Controller {
 
         gc.fillPolygon(new double[]{position.x * RobotWidth + incs[position.orientation][0], position.x * RobotWidth + incs[position.orientation][1], position.x * RobotWidth + incs[position.orientation][2]},
                 new double[]{position.y * RobotWidth + incs[position.orientation][3], position.y * RobotWidth + incs[position.orientation][4], position.y * RobotWidth + incs[position.orientation][5]}, 3);
-
 
     }
 

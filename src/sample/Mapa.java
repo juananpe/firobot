@@ -113,10 +113,10 @@ public class Mapa extends Application {
 
     }
 
-    public void loadMap() {
+    public void loadMap(File ficheroMapa) {
         Scanner scanner = null;
         try {
-            scanner = new Scanner(new File("mapa.txt"));
+            scanner = new Scanner(ficheroMapa);
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 parse(line);
@@ -154,9 +154,9 @@ public class Mapa extends Application {
     }
 
     // launch the application
-    public Mapa(Canvas mapCanvas) {
+    public Mapa(Canvas mapCanvas, File ficheroMapa) {
 
-        loadMap();
+        loadMap(ficheroMapa);
         mapHeight = map.size() / mapWidth;
 
         // graphics context
@@ -174,7 +174,7 @@ public class Mapa extends Application {
         // set title for the stage
         stage.setTitle("creating canvas");
 
-        loadMap();
+        loadMap(new File("mapa1.txt"));
         mapHeight = map.size() / mapWidth;
 
         System.out.println("Start:" + start);
