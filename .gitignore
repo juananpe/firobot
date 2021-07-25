@@ -6,8 +6,10 @@ build
 
 .idea
 
+gradle
+
 out
 
-gradle
+src/main/solvers
 
 /src/main/resources/setup.properties
