@@ -8,10 +8,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import sample.Interact;
+
 import java.io.File;
 
 public class Controller {
@@ -25,6 +28,14 @@ public class Controller {
     private Canvas robotLayer;
     @FXML
     private Canvas mapLayer;
+    @FXML
+    private Label lblMapa;
+    @FXML
+    private Label lblSolver;
+    @FXML
+    private Button btnStart;
+    @FXML
+    private Button btnStop;
 
     GraphicsContext gc;
 
@@ -35,19 +46,38 @@ public class Controller {
 
     private final int RobotWidth = 15;
 
-    public void initialize() throws Exception {
+    public void initialize() {
         gc = robotLayer.getGraphicsContext2D();
         // drawShapes(gc);
         robotLayer.toFront();
+
+        btnStart.setDisable(true);
+        btnStop.setDisable(true);
+
+        gc.setFill(Color.RED);
+        gc.fillText("INSTRUCCIONES", 0, 30);
+        gc.fillText("1. Selecciona un mapa", 0, 60);
+        gc.fillText("2. Selecciona un solver (el ejecutable con la solución)", 0, 90);
+        gc.fillText("3. Pulsa Start", 0, 120);
+
+        lblMapa.setText("Sin cargar");
+        lblSolver.setText("Sin cargar");
+
     }
 
     public void loadMapFile(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Selecciona un mapa");
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Ficheros mapa",  "*.txt"));
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Ficheros mapa", "*.txt"));
         ficheroMapa = fileChooser.showOpenDialog(null);
         if (ficheroMapa == null || !ficheroMapa.isFile()) {
             return;
+        }
+
+        lblMapa.setText(ficheroMapa.getName());
+        if (solver!=null) {
+            btnStart.setDisable(false);
+            btnStop.setDisable(true);
         }
 
         // remove previous map
@@ -75,17 +105,25 @@ public class Controller {
         System.out.println(System.getProperty("os.name"));
 
         if (System.getProperty("os.name").contains("Windows")) {
-            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Ficheros ejecutables",  "*.exe"));
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Ficheros ejecutables", "*.exe"));
         }
         File ficheroSolver = fileChooser.showOpenDialog(null);
         if (ficheroSolver == null || !ficheroSolver.isFile()) {
             return;
         }
+
+        if (mapa!=null) {
+            btnStart.setDisable(false);
+            btnStop.setDisable(true);
+        }
+
         solver = ficheroSolver.getAbsolutePath();
+        lblSolver.setText(ficheroSolver.getName());
 
     }
 
     public void stop(ActionEvent event) {
+
         if (interact != null) {
             try {
                 interact.stop();
@@ -93,6 +131,9 @@ public class Controller {
                 System.out.println("Reloj parado");
             }
         }
+
+        btnStart.setDisable(false);
+        btnStop.setDisable(true);
     }
 
     public void start(ActionEvent event) {
@@ -103,6 +144,9 @@ public class Controller {
         }
 
         interact.go();
+
+        btnStart.setDisable(true);
+        btnStop.setDisable(false);
 
     }
 
