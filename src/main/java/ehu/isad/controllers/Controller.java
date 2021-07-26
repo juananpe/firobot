@@ -57,7 +57,7 @@ public class Controller {
         gc.setFill(Color.RED);
         gc.fillText("INSTRUCCIONES", 0, 30);
         gc.fillText("1. Selecciona un mapa", 0, 60);
-        gc.fillText("2. Selecciona un solver (el ejecutable con la solución)", 0, 90);
+        gc.fillText("2. Selecciona un solver (el ejecutable con la soluci\u00f3n)", 0, 90);
         gc.fillText("3. Pulsa Start", 0, 120);
 
         lblMapa.setText("Sin cargar");

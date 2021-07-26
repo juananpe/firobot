@@ -1,4 +1,4 @@
-open module oinarria {
+open module labirintoa {
   requires javafx.graphics;
   requires javafx.controls;
   requires javafx.fxml;
