@@ -13,7 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
-import sample.Interact;
+import ehu.isad.Interact;
 
 import java.io.File;
 
@@ -55,20 +55,20 @@ public class Controller {
         btnStop.setDisable(true);
 
         gc.setFill(Color.RED);
-        gc.fillText("INSTRUCCIONES", 0, 30);
-        gc.fillText("1. Selecciona un mapa", 0, 60);
-        gc.fillText("2. Selecciona un solver (el ejecutable con la soluci\u00f3n)", 0, 90);
-        gc.fillText("3. Pulsa Start", 0, 120);
+        gc.fillText("How to Start", 0, 30);
+        gc.fillText("1. Choose a map", 0, 60);
+        gc.fillText("2. Choose a solver (your executable solution)", 0, 90);
+        gc.fillText("3. Press Start", 0, 120);
 
-        lblMapa.setText("Sin cargar");
-        lblSolver.setText("Sin cargar");
+        lblMapa.setText("Not loaded");
+        lblSolver.setText("Not loaded");
 
     }
 
     public void loadMapFile(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Selecciona un mapa");
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Ficheros mapa", "*.txt"));
+        fileChooser.setTitle("Choose a map");
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Map files", "*.txt"));
         ficheroMapa = fileChooser.showOpenDialog(null);
         if (ficheroMapa == null || !ficheroMapa.isFile()) {
             return;
@@ -101,11 +101,11 @@ public class Controller {
 
     public void loadSolver(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Selecciona el ejecutable a probar");
+        fileChooser.setTitle("Choose your executable solution");
         System.out.println(System.getProperty("os.name"));
 
         if (System.getProperty("os.name").contains("Windows")) {
-            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Ficheros ejecutables", "*.exe"));
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Executable files", "*.exe"));
         }
         File ficheroSolver = fileChooser.showOpenDialog(null);
         if (ficheroSolver == null || !ficheroSolver.isFile()) {
@@ -128,7 +128,7 @@ public class Controller {
             try {
                 interact.stop();
             } catch (InterruptedException e) {
-                System.out.println("Reloj parado");
+                System.out.println("Clock stopped");
             }
         }
 
