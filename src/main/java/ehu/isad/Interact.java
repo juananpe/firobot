@@ -1,8 +1,5 @@
-package sample;
+package ehu.isad;
 
-import ehu.isad.Mapa;
-import ehu.isad.Orientation;
-import ehu.isad.Position;
 import ehu.isad.controllers.Controller;
 
 import java.io.*;
