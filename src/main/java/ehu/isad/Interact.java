@@ -28,8 +28,6 @@ public class Interact {
     public void stop() throws InterruptedException {
         playing = false;
 
-//        reloj.join();
-//        streamGobbler.join();
     }
 
     public void go() {
@@ -46,7 +44,6 @@ public class Interact {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            // BufferedReader inp = new BufferedReader(new InputStreamReader(p.getInputStream()));
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(p.getOutputStream()));
 
             //communication
@@ -57,15 +54,15 @@ public class Interact {
             controller.position.y = mapa.getStart().y;
             controller.position.orientation = Orientation.NORTH;
             controller.imprimir("Starting...");
-            // Scanner sc = new Scanner(System.in);
-            // while (true) {
+
+
             while (playing && (controller.position.x != mapa.getEnd().x || controller.position.y != mapa.getEnd().y)) {
                 try {
                     TimeUnit.SECONDS.sleep(1);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                String c; // = sc.nextLine();
+                String c;
 
                 // Primer paso, girar
                 if (mapa.obstacleAt(controller.position)) {
@@ -74,14 +71,10 @@ public class Interact {
                     c = "1";
                 }
 
-//                if (!c.contains("0") && !c.contains("1")) {
-//                    System.exit(0);
-//                }
                 try {
                     out.write(c + "\n");
                     out.flush();
                 } catch (IOException e) {
-                    // e.printStackTrace();
                     System.out.println("Stream closed");
                 }
             }
