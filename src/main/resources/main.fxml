@@ -33,7 +33,7 @@
               </SplitPane>
             <AnchorPane prefHeight="30.0" prefWidth="600.0">
                <children>
-                  <Label text="Mapa:" />
+                  <Label text="  Map:" />
                   <Label fx:id="lblMapa" layoutX="49.0" prefHeight="17.0" prefWidth="119.0" />
                   <Label layoutX="247.0" text="Solver" />
                   <Label fx:id="lblSolver" layoutX="320.0" prefHeight="17.0" prefWidth="146.0" />

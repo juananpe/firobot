@@ -105,12 +105,12 @@ public class Interact {
                 String line = null;
                 try {
                     while (playing && (line = br.readLine()) != null) {
-                        if (line.contains("girar")) {
-                            System.err.println("Girar");
-                            controller.imprimir("Girar");
+                        if (line.contains("Turn")) {
+                            System.err.println("Turn 90 degrees");
+                            controller.imprimir("Turn");
                             controller.position.orientation = (controller.position.orientation + 1) % 4;
                             System.err.println(Position.orientationList.get(controller.position.orientation));
-                        } else if (line.contains("Sigue")) {
+                        } else if (line.contains("Go")) {
                             switch (controller.position.orientation) {
                                 // FIXME Orientation
                                 case 0: // NORTH
@@ -127,11 +127,11 @@ public class Interact {
                                     break;
                             }
 
-                            System.err.println("Sigue");
-                            controller.imprimir("Sigue");
+                            System.err.println("Go ahead");
+                            controller.imprimir("Go ahead");
                             System.err.println("Position:" + controller.position.x + "," + controller.position.y);
                             System.err.println(Position.orientationList.get(controller.position.orientation));
-                        } else if (line.contains("HA LLEGADO")) {
+                        } else if (line.contains("You got it")) {
                             controller.imprimir("YOU GOT IT!");
                             break;
                         }

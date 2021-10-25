@@ -55,10 +55,10 @@ public class Controller {
         btnStop.setDisable(true);
 
         gc.setFill(Color.RED);
-        gc.fillText("How to Start", 0, 30);
-        gc.fillText("1. Choose a map", 0, 60);
-        gc.fillText("2. Choose a solver (your executable solution)", 0, 90);
-        gc.fillText("3. Press Start", 0, 120);
+        gc.fillText("\tHow to Start", 0, 30);
+        gc.fillText("\t1. Choose a map", 0, 60);
+        gc.fillText("\t2. Choose a solver (your executable solution)", 0, 90);
+        gc.fillText("\t3. Press Start", 0, 120);
 
         lblMapa.setText("Not loaded");
         lblSolver.setText("Not loaded");
