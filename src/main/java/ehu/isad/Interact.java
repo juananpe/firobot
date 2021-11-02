@@ -115,17 +115,16 @@ public class Interact {
                             System.err.println(Position.orientationList.get(controller.position.orientation));
                         } else if (line.contains("Go")) {
                             switch (controller.position.orientation) {
-                                // FIXME Orientation
-                                case 0: // NORTH
+                                case Orientation.NORTH:
                                     controller.position.y--;
                                     break;
-                                case 1: // EAST
+                                case Orientation.EAST:
                                     controller.position.x++;
                                     break;
-                                case 2: // SOUTH
+                                case Orientation.SOUTH:
                                     controller.position.y++;
                                     break;
-                                case 3: // WEST
+                                case Orientation.WEST:
                                     controller.position.x--;
                                     break;
                             }
