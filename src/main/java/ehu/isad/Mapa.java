@@ -58,6 +58,10 @@ public class Mapa extends Application {
         return end;
     }
 
+    public void setEnd(int x, int y) {
+        this.end = new Position(x,y);
+    }
+
     public boolean obstacleAt(Position pos) {
         int dx = 0, dy = 0;
 

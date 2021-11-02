@@ -55,6 +55,13 @@ public class Interact {
             controller.position.orientation = Orientation.NORTH;
             controller.imprimir("Starting...");
 
+            // set end point
+            try {
+                out.write(mapa.getEnd().x + " " + mapa.getEnd().y + "\n");
+                out.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             while (playing && (controller.position.x != mapa.getEnd().x || controller.position.y != mapa.getEnd().y)) {
                 try {
@@ -66,9 +73,9 @@ public class Interact {
 
                 // Primer paso, girar
                 if (mapa.obstacleAt(controller.position)) {
-                    c = "0";
-                } else {
                     c = "1";
+                } else {
+                    c = "0";
                 }
 
                 try {
@@ -79,6 +86,7 @@ public class Interact {
                 }
             }
             playing = false;
+            controller.imprimir("YOU GOT IT!");
             System.err.println("Stopped at:" + controller.position);
 
         });
@@ -97,6 +105,8 @@ public class Interact {
                 BufferedReader br = new BufferedReader(streamReader);
                 String line = null;
                 try {
+                    br.readLine(); // Read the end point, but it is useless for us, bc it is calculated autom.
+
                     while (playing && (line = br.readLine()) != null) {
                         if (line.contains("Turn")) {
                             System.err.println("Turn 90 degrees");
